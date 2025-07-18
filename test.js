@@ -25,6 +25,8 @@ app.get('/eval', (req, res) => {
   res.send(eval(code));                  // CodeQL will flag this line
 });
 
+
+
 // ---------- 3) LEAKED SECRET ----------
 const SECRET_GH_PAT = "ghp_1234567890abcdef1234567890abcdef"; // gitleaks / push-protection
 
