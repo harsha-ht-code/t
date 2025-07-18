@@ -1,0 +1,33 @@
+name: "CodeQL analysis"
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+  schedule:                     # optional nightly scan
+    - cron: '0 3 * * *'         # 03:00 UTC
+
+jobs:
+  codeql:
+    name: Analyze with CodeQL
+    permissions:
+      contents: read
+      security-events: write    # allow upload of SARIF results
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      # ---------- CodeQL v3 ----------
+      - name: Initialize CodeQL
+        uses: github/codeql-action/init@v3
+        with:
+          languages: javascript            # add python,java,... as needed
+          queries: security-extended       # or 'security-and-quality'
+
+      # If your JS needs a build (e.g. webpack):
+      # - run: npm ci && npm run build
+
+      - name: Perform CodeQL analysis
+        uses: github/codeql-act
