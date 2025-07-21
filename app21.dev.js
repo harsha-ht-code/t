@@ -1,4 +1,101 @@
-only if ht_ctc_variables not loaded.
+// Click to Chat
+(function ($) {
+
+    // ready
+    $(function () {
+
+        // variables
+        var v = '4.9';
+        var url = window.location.href;
+        var post_title = (typeof document.title !== "undefined") ? document.title : '';
+        var is_mobile = 'no';
+
+        try {
+            // Where user can install app. 
+            is_mobile = (typeof navigator.userAgent !== "undefined" && navigator.userAgent.match(/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i)) ? "yes" : "no";
+            console.log('User agent: is_mobile: ' + is_mobile);
+        } catch (e) {}
+
+        if ('no' == is_mobile) {
+            // is_mobile yes/no,  desktop > 1025
+            var is_mobile = (typeof screen.width !== "undefined" && screen.width > 1025) ? "no" : "yes";
+            console.log('screen width: is_mobile: ' + is_mobile);
+        }
+
+        var no_num = '';
+
+        var ht_ctc_storage = {};
+
+        function getStorageData() {
+            console.log('app.js - getStorageData');
+            if (localStorage.getItem('ht_ctc_storage')) {
+                ht_ctc_storage = localStorage.getItem('ht_ctc_storage');
+                ht_ctc_storage = JSON.parse(ht_ctc_storage);
+                console.log(ht_ctc_storage);
+            }
+        }
+        getStorageData();
+
+        // get items from ht_ctc_storage
+        function ctc_getItem(item) {
+            console.log('app.js - ctc_getItem');
+            return (ht_ctc_storage[item]) ? ht_ctc_storage[item] : false;
+        }
+
+        // set items to ht_ctc_storage storage
+        function ctc_setItem(name, value) {
+            console.log(ht_ctc_storage);
+            getStorageData();
+            console.log(ht_ctc_storage);
+            console.log('app.js - ctc_setItem: name: ' + name + ' value: ' + value);
+            ht_ctc_storage[name] = value;
+            console.log(ht_ctc_storage);
+            var newValues = JSON.stringify(ht_ctc_storage);
+            localStorage.setItem('ht_ctc_storage', newValues);
+        }
+
+        var ctc = '';
+        variable_ctc();
+
+        var ctc_values = {};
+        variable_ctc_values();
+
+        // document.dispatchEvent(
+        //     new CustomEvent("ht_ctc_fn_all", { detail: { ht_ctc_storage, ctc_setItem, ctc_getItem } })
+        // );
+        
+        chat_data();
+        start();
+
+        /**
+         * get ht_ctc_chat_var and assing to ctc variable
+         */
+        function variable_ctc() {
+            if (typeof ht_ctc_chat_var !== "undefined") {
+                ctc = ht_ctc_chat_var;
+            } else {
+                try {
+                    if (document.querySelector('.ht_ctc_chat_data')) {
+                        var settings = $('.ht_ctc_chat_data').attr('data-settings');
+                        ctc = JSON.parse(settings);
+                        window.ht_ctc_chat_var = ctc;
+                    }
+                } catch (e) {
+                    ctc = {};
+                }
+            }
+        }
+
+        /**
+         * get ht_ctc_variables and assing to ctc_values variable
+         */
+        function variable_ctc_values() {
+            console.log('variable_ctc_values');
+
+            if (typeof ht_ctc_variables !== "undefined") {
+                ctc_values = ht_ctc_variables;
+            } else {
+                // fallback values(dont merge).. only if ht_ctc_variables not loaded.
                 // later remove params in this fallback values to reduce size.
                 ctc_values = {
                     'g_an_event_name': 'click to chat',
@@ -993,6 +1090,4 @@ only if ht_ctc_variables not loaded.
 
     });
 
-
-    
 })(jQuery);
