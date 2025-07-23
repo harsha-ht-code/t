@@ -49,6 +49,8 @@
             return value;
         }
 
+        
+
         function currency_changed(e, t) {
 
             var change_val = e.target.value;
